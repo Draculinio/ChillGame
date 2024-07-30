@@ -13,3 +13,13 @@ https://www.youtube.com/@PythonIsGod
 ## Can I send commands to another place?
 
 # ASSUMPTION: Screen is 24x80 (maybe 25?)
+
+
+# Rooms:
+
+### For now, 0 = empty space
+###          1 = wall '#'
+
+# Enemies:
+
+### Rat = 'r'
