@@ -18,7 +18,6 @@ class Enemies:
             if room.room_arch[self.posy][self.posx] in [0]:
                 found = True
     
-    #TODO: seems like the enemy always goes to the left. TABSSSSSSSSS
     #TODO: the enemies should move every turn.
     def move_enemy(self, room):
         move = random.randint(1,4)
@@ -26,12 +25,11 @@ class Enemies:
             if self.posx>1 and room.room_arch[self.posy][self.posx-1] in [0]:
                 self.posx -=1
         if move == 2:
-            if self.posx>1 and room.room_arch[self.posy][self.posx+1] in [0]:
+            if self.posx<78 and room.room_arch[self.posy][self.posx+1] in [0]:
                 self.posx +=1
         if move == 3:
-            if self.posx>1 and room.room_arch[self.posy-1][self.posx] in [0]:
+            if self.posy>1 and room.room_arch[self.posy-1][self.posx] in [0]:
                 self.posy -=1
         if move == 4:
-            if self.posx>1 and room.room_arch[self.posy+1][self.posx] in [0]:
+            if self.posy<20 and room.room_arch[self.posy+1][self.posx] in [0]:
                 self.posy+=1
-                        

@@ -8,8 +8,8 @@ class Character:
         self.defense = 0
         self.life = 0
         self.gold = 0
-        self.posx = 10
-        self.posy = 10
+        self.posx = 40
+        self.posy = 13
     
     def char_creator(self):
         str_mod = {'h':5, 'e':3}

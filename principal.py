@@ -1,24 +1,12 @@
 from character import Character
 from room import Room
 from enemies import Enemies
-import curses
+from printer import Printer
+import curses #this should go out of here... some day...
 from curses import wrapper
 
 def print_player(character,stdscr): #dont even know if this is needed
     stdscr.addstr(24,0,character.char_info())
-
-#TODO: This must be part of room responsability or a printer class.
-def print_room(room,stdscr):
-    #TODO: All this is terrible because dependencies here are a mess. REFACTOR OR DIE!!!!!
-    curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    desc = room.describe_room()
-    stdscr.addstr(0,0, desc['name'])
-    symbols = {0:[' ', 3], 1:['#', 3],2:['@',1], 3:['r',2]} #Don't kill me for this...
-    for i in range(0,21):
-        for j in range(0,78): #This really looks like yandere simulator...
-                stdscr.addstr(i+2,j+2,symbols[room.room_arch[i][j]][0], curses.color_pair(symbols[room.room_arch[i][j]][1]))
 
 def print_board(stdscr):
     for i in range(80):
@@ -30,16 +18,17 @@ def print_board(stdscr):
 
 def main(stdscr):
     #Initial room creator
-    room = Room('Inside your house', 'This is your house',['rat'])
+    room = Room(1)
     enemy = Enemies('Rat',2,2,30,11,11,3)
     enemy.initial_place(room)
-    #TODO: Need a logging system...
     curses.start_color()
     curses.use_default_colors()
     curses.curs_set(0)
+    printer = Printer(stdscr)
     stdscr.clear()
-    stdscr.addstr(10,20, 'CHILL AND PYTHON')
-    stdscr.addstr(0,0, 'Python Is God presents...')
+    #stdscr.addstr(10,20, 'CHILL AND PYTHON')
+    #stdscr.addstr(0,0, 'Python Is God presents...')
+    printer.print_intro()
     stdscr.refresh()
     stdscr.getch()
     stdscr.erase()
@@ -58,10 +47,9 @@ def main(stdscr):
                                #######MAIN LOOP#######
     command = ''
     while command != 101:
-        #stdscr.addstr(p.posy,p.posx,'@',curses.color_pair(1)) #WRITE THE CHARACTER
         print_player(p, stdscr)
         print_board(stdscr)
-        print_room(room,stdscr)
+        printer.print_room(room)
         command = stdscr.getch() #Interesting, this returns an ASCII char...
         stdscr.erase()
         if command == curses.KEY_LEFT: #Interesting, if I want to have arrows I should not convert ascii...
@@ -85,8 +73,6 @@ def main(stdscr):
                     room.room_arch[p.posy][p.posx] = 0 #TERRIBLE AGAIN
                     p.posy +=1        #Yes, terrible...
         room.room_arch[p.posy][p.posx] = 2
-        #Move enemies
-        #room.move_enemies()
         room.room_arch[enemy.posy][enemy.posx] = 0 #THE MOST HARDCODED THING ON EARTH
         enemy.move_enemy(room)
         room.room_arch[enemy.posy][enemy.posx] = enemy.symbol #Better...
